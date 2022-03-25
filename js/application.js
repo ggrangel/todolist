@@ -1,8 +1,40 @@
+$(document).ready(function () {
+  updateUI();
+});
+
+let updateUI = function () {
+  $.ajax({
+    type: "GET",
+    url: "https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=306",
+    dataType: "json",
+    success: function (response, textStatus) {
+      $("#todo-list").empty();
+      response.tasks.forEach(function (task) {
+        // console.log(task);
+        $("#todo-list").append(
+          '<div class="row"><p class="col-xs-8">' +
+            task.content +
+            '</p><button class="delete" data-id="' +
+            task.id +
+            '">Delete</button><input type="checkbox" class="mark-complete" data-id="' +
+            task.id +
+            '"' +
+            (task.completed ? "checked" : "") +
+            "</div>"
+        );
+      });
+    },
+    error: function (request, textStatus, errorMessage) {
+      console.log(errorMessage);
+    },
+  });
+};
+
 let addTask = function () {
   $.ajax({
     type: "POST",
     url: "https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=306",
-    contentTYpe: "application/json",
+    contentType: "application/json",
     dataType: "json",
     data: JSON.stringify({
       task: {
@@ -10,8 +42,7 @@ let addTask = function () {
       },
     }),
     success: function (response, textStatus) {
-      console.log(response);
-      console.log(textStatus);
+      // console.log(response);
       updateUI();
     },
     error: function (request, textStatus, errorMessage) {
@@ -20,12 +51,15 @@ let addTask = function () {
   });
 };
 
-let updateUI = function () {
+let removeTask = function (id) {
   $.ajax({
-    type: "GET",
-    url: "https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=308",
-    dataType: "json",
-    sucess: function (response, textStatus) {
+    type: "DELETE",
+    url:
+      "https://altcademy-to-do-list-api.herokuapp.com/tasks/" +
+      id +
+      "?api_key=306",
+    success: function (response, textStatus) {
+      updateUI();
       console.log(response);
     },
     error: function (request, textStatus, errorMessage) {
@@ -33,3 +67,7 @@ let updateUI = function () {
     },
   });
 };
+
+$(document).on("click", ".delete", function () {
+  removeTask($(this).data("id"));
+});
