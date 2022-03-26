@@ -92,3 +92,77 @@ var markTaskComplete = function(id) {
     },
   });
 };
+
+let filterTasks = function() {
+  all = $("#all").is(":checked");
+  active = $("#active").is(":checked");
+  complete = $("#complete").is(":checked");
+
+  if (all) {
+    updateUI();
+  } else if (active) {
+    showActiveOnlyTasks();
+  } else {
+    showCompletedOnlyTasks();
+  }
+};
+
+let showActiveOnlyTasks = function() {
+  $.ajax({
+    type: "GET",
+    url: "https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=306",
+    dataType: "json",
+    success: function(response, textStatus) {
+      $("#todo-list").empty();
+      response.tasks.forEach(function(task) {
+        if (task.completed) {
+          return;
+        }
+        $("#todo-list").append(
+          '<div class="row"><p class="col-xs-8">' +
+          task.content +
+          '</p><button class="delete" data-id="' +
+          task.id +
+          '">Delete</button><input type="checkbox" class="mark-complete" data-id="' +
+          task.id +
+          '"' +
+          (task.completed ? "checked" : "") +
+          ">"
+        );
+      });
+    },
+    error: function(request, textStatus, errorMessage) {
+      console.log(errorMessage);
+    },
+  });
+};
+
+let showCompletedOnlyTasks = function() {
+  $.ajax({
+    type: "GET",
+    url: "https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=306",
+    dataType: "json",
+    success: function(response, textStatus) {
+      $("#todo-list").empty();
+      response.tasks.forEach(function(task) {
+        if (!task.completed) {
+          return;
+        }
+        $("#todo-list").append(
+          '<div class="row"><p class="col-xs-8">' +
+          task.content +
+          '</p><button class="delete" data-id="' +
+          task.id +
+          '">Delete</button><input type="checkbox" class="mark-complete" data-id="' +
+          task.id +
+          '"' +
+          (task.completed ? "checked" : "") +
+          ">"
+        );
+      });
+    },
+    error: function(request, textStatus, errorMessage) {
+      console.log(errorMessage);
+    },
+  });
+};

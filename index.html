@@ -16,14 +16,39 @@
   </head>
   <body>
     <div class="container">
-      <div class="col-12">
-        <h1>To Do List</h1>
-        <form>
-          <input type="text" id="taskInput" />
-          <button type="button" onclick="addTask()">Add Task</button>
-        </form>
+      <div class="row">
+        <div class="col-12">
+          <h1>To Do List</h1>
+          <form>
+            <input type="text" id="taskInput" />
+            <button type="button" onclick="addTask()">Add Task</button>
+          </form>
+        </div>
+        <div class="col-12" id="todo-list"></div>
+        <div class="col-12">
+          <input
+            type="radio"
+            name="tasks-shown"
+            id="all"
+            onclick="filterTasks()"
+          />
+          <label for="html">All</label><br />
+          <input
+            type="radio"
+            name="tasks-shown"
+            id="active"
+            onclick="filterTasks()"
+          />
+          <label for="html">Active</label><br />
+          <input
+            type="radio"
+            name="tasks-shown"
+            id="complete"
+            onclick="filterTasks()"
+          />
+          <label for="html">Complete</label><br />
+        </div>
       </div>
-      <div class="col-12" id="todo-list"></div>
     </div>
   </body>
 </html>
